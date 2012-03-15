@@ -201,7 +201,7 @@
 }
 
 - (RKObjectMappingResult*)performMapping:(NSError**)error {
-    NSAssert(_sentSynchronously || ![NSThread isMainThread], @"Mapping should occur on a background thread");
+    NSAssert(_sentSynchronously || [_response wasLoadedFromCache] || ![NSThread isMainThread], @"Mapping should occur on a background thread");
     
     RKObjectMappingProvider* mappingProvider;
     if (self.objectMapping) {
@@ -368,7 +368,7 @@
     
 	if ([self isResponseMappable]) {
         // Determine if we are synchronous here or not.
-        if (_sentSynchronously) {
+        if (_sentSynchronously || [_response wasLoadedFromCache]) {
             NSError* error = nil;
             _result = [[self performMapping:&error] retain];
             if (self.result) {
