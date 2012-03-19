@@ -382,7 +382,7 @@ static NSString* const RKManagedObjectStoreThreadDictionaryEntityCacheKey = @"RK
     NSAssert1(dictionary, @"Thread local cache of %@ objects should not be nil", entityName);
     object = [dictionary objectForKey:lookupValue];
     
-    if (object == nil) {
+    if (object == nil || object.managedObjectContext == nil) {
         object = [[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext] autorelease];
         [dictionary setObject:object forKey:lookupValue];
     }
